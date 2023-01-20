@@ -1,0 +1,51 @@
+# This is a template service for using VM definitions to run
+# QEMU virtual machines as a systemd service; with some decent
+# security as well.
+#
+# 2022 modeco80 <lily.modeco80@protonmail.ch>
+
+[Unit]
+Description=%I VM
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+Restart=always
+
+# VMs shouldn't ever take this long to stop; if they do there's
+# probably a problem and we can just hard kill it.
+TimeoutStopSec=60
+RestartSec=60
+
+User=qemu
+Group=qemu
+
+# Security settings
+ProtectHome=yes
+ProtectSystem=strict
+ProtectHostname=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectKernelTunables=yes
+LockPersonality=yes
+
+# Only allow these devices
+DevicePolicy=closed
+DeviceAllow=/dev/kvm
+DeviceAllow=/dev/net/tun
+DeviceAllow=/dev/vhost-net
+DeviceAllow=/dev/vhost-vsock
+
+# These are the only paths on the system that we should allow full R/W access to
+ReadWritePaths=/stor/vms /run/qemu
+
+# Disallow syscalls which would be strange for qemu to try
+SystemCallFilter=~@mount @obsolete @reboot @privileged @setuid
+
+ExecStart=/etc/vms/configs/%I.sh start
+ExecStop=/etc/vms/configs/%I.sh stop
+
+[Install]
+WantedBy=multi-user.target

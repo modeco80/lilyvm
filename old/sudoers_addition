@@ -1,0 +1,2 @@
+## Unprivlidged users
+qemu ALL=NOPASSWD: [vms dir]/functions/if/qemu-ifup*, [vms dir]/functions/if/qemu-ifdown*

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# just bring it down
+ip l set dev $1 down
