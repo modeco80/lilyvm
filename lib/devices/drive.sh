@@ -36,9 +36,13 @@ HdDrive() {
 		FORMAT_STR="format=$5";
 	fi
 	
+	# ssd hack for Takami
+	local SSD_HACK="";
+	[[ "$VM_NAME" == "takami" ]] && SSD_HACK=",rotation_rate=1"
+
 	echo "
 		-drive if=none,file=$3,$CACHE_STR,discard=unmap,$FORMAT_STR,aio=io_uring,id=$1_drive
-		-device $2,id=$1,drive=$1_drive
+		-device $2,id=$1${SSD_HACK},drive=$1_drive
 	";
 }
 
