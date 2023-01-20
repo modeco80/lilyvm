@@ -8,14 +8,15 @@ VM_ROOT="/home/lily/vms"
 . ${VM_ROOT}/lib/devices.sh
 
 VM_NAME="sample"
-VM_BASE="virtio-modern" # this defines what base to use. "virtio-modern" should probably be preferred,
-						# but there are others (and you can write your own)
+VM_BASE="q35-modern" # this defines what base to use. "q35-modern" should probably be preferred for modern guests.
 
+# this is where lilyvm expects data for the vm to be.
+# It's probably a good idea to use this, and to only deviate if using
+# raw block devices/LVM in your configuration (in which case it's unavoidable).
 VM_DATA_ROOT="/mnt/data/vms/${VM_NAME}"
 
 VM_DEVICES=(
 	"$(CPU host 2 "no")" # no options
-
 	"$(Memory 2G prealloc)"
 
 	# Network
@@ -32,7 +33,7 @@ VM_DEVICES=(
 	
 	"$(Uefi)"
 	
-	#
+	# Assorted QEMU options can also be stuck in here.
 	"-device usb-tablet"
 );
 

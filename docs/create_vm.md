@@ -1,6 +1,6 @@
 # Creating a VM
 
-First, copy the `sample.sh` file in configs/ to a new .sh file. 
+First, copy the `sample_config.sh` file in configs/ to a new .sh file (or extensionless)
 Keep note of what you name the file; the basename will be important later.
 
 Edit the file to your liking; after you have done so it's pretty much ready
