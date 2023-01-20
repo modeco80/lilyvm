@@ -1,7 +1,6 @@
 #!/bin/bash
-
-# Generic setup for modern virtual machines,
-# using as much virtio-scsi and hypervisor enlightments as possible to improve performance.
+#
+# Generic setup for modern virtual machines
 
 # You can assign to this variable if using a custom QEMU binary,
 # and we'll obey it. (TODO: Put in core.sh?)
