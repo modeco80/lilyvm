@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# just bring it up
-ip l set dev $1 up
