@@ -58,10 +58,7 @@ HdDrive() {
 		SSD_HACK=",rotation_rate=1"
 	fi
 	
-	echo "
-		-drive if=none,file=$3,$CACHE_STR,discard=unmap,$FORMAT_STR,aio=$_LVM_AIO,id=$1_drive,$(_GenerateLVMDiskLimit)
-		-device $2,id=$1${SSD_HACK},drive=$1_drive
-	";
+	echo "-drive if=none,file=$3,$CACHE_STR,discard=unmap,$FORMAT_STR,aio=$_LVM_AIO,id=$1_drive,$(_GenerateLVMDiskLimit) -device $2,id=$1${SSD_HACK},drive=$1_drive";
 }
 
 # $1 - id
@@ -78,15 +75,9 @@ CdDrive() {
 	fi
 
 	if [[ "$VM_BASE" == *q35* ]]; then	
-		echo "
-			-drive if=none,media=cdrom,aio=$_LVM_AIO,id=$1
-			-device ide-cd,drive=$1,bus=ide.2,id=$1_drive
-		";
+		echo "-drive if=none,media=cdrom,aio=$_LVM_AIO,id=$1 -device ide-cd,drive=$1,bus=ide.2,id=$1_drive";
 	else
-		echo "
-			-drive if=none,media=cdrom,aio=$_LVM_AIO,id=$1
-			-device ide-cd,drive=$1,id=$1_drive
-		";
+		echo "-drive if=none,media=cdrom,aio=$_LVM_AIO,id=$1 -device ide-cd,drive=$1,id=$1_drive";
 	fi
 }
 

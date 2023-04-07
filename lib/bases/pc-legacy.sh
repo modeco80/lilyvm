@@ -24,7 +24,7 @@ fi
 
 VM_QEMU_ARGS="-nodefaults
     -name $VM_NAME,process=$VM_NAME
-    -M pc,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
+    -machine pc,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
     -rtc base=localtime,clock=vm
-	${VM_DEVICES[@]}
+    ${VM_DEVICES[@]}
     $VM_MONITOR"

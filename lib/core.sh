@@ -46,6 +46,11 @@ StopVM() {
 	# and just kill the QEMU process hard
 	#
 	# (Though on other init systems; there won't be anything like that so we should timeout here too..)
+
+	[[ "$VM_MONITOR" == "" ]] && {
+		echo "LVM cannot stop this VM. You're on your own."
+		exit 1;
+	}
 	
 	local count=60
 

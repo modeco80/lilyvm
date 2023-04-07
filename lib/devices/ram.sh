@@ -7,7 +7,7 @@
 # $2... - "prealloc"
 Memory() {
 	if [[ "$1" == "" ]]; then
-		echo "error in DisplayAdapter: Memory must be filled out" >/dev/stderr;
+		echo "error in Memory: Memory must be filled out" >/dev/stderr;
 		exit 1;
 	fi
 	
@@ -22,6 +22,8 @@ Memory() {
 			;;
 			
 			# I think there's a better way to do this
+			# (future lily note: There is. -object memory-backend-file
+			# then -machine memory-backend=backendID)
 			/*)
 				echo "-mem-path $1"
 			;;
@@ -34,8 +36,6 @@ Memory() {
 		shift;
 	done
 }
-
-
 
 # A dumb testcase
 

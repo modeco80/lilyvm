@@ -25,7 +25,7 @@ fi
 VM_QEMU_ARGS="
     -nodefaults
     -name $VM_NAME,process=$VM_NAME
-    -M q35,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
+    -machine pc-q35-7.0,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
     -rtc base=localtime,clock=vm
     ${VM_DEVICES[@]}
     $VM_MONITOR

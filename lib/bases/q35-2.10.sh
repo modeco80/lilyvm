@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Generic setup for modern virtual machines
+# Generic setup for modern Windows VMs
 # This is a version of Q35 that makes Windows XP/2000 work on VM0. -Dartz
 
 # You can assign to this variable if using a custom QEMU binary,
@@ -26,7 +26,7 @@ fi
 VM_QEMU_ARGS="
     -nodefaults
     -name $VM_NAME,process=$VM_NAME
-    -M pc-q35-2.10,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
+    -machine pc-q35-2.10,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
     -rtc base=localtime,clock=vm
     ${VM_DEVICES[@]}
     $VM_MONITOR

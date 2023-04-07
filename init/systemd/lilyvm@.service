@@ -20,8 +20,8 @@ Restart=always
 TimeoutStopSec=60
 RestartSec=60
 
-User=qemu
-Group=qemu
+User=collabvm
+Group=collabvm
 
 # Security settings
 ProtectHome=yes
