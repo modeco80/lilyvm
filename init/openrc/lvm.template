@@ -1,0 +1,8 @@
+# This is a sample conf.d for lvm template services.
+# Copy this to /etc/conf.d/lvm.<name> and edit accordingly
+
+# the path to the directory the LVM config file is placed in
+lvm_path="/path/to/lvm/config_dir"
+
+# the LVM user to run as
+#lvm_user="qemu"

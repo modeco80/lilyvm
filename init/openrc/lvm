@@ -1,0 +1,53 @@
+#!/sbin/openrc-run
+
+# To use this service:
+# # cp -rv lvm /etc/init.d
+# # ln -s /etc/init.d/lvm /etc/init.d/lvm.<vm_name>
+# # cp lvm.template /etc/conf.d/lvm.<vm.name>
+# # (edit /etc/conf.d/lvm.vm_name)
+# ... done?
+
+# template variable here defines the filename of the LVM script
+# this filename will be looked up in $lvm_path
+
+lvm_name="${RC_SVCNAME#lvm.}"
+name="LilyVM VM $lvm_name"
+
+supervisor="supervise-daemon"
+
+# lvm configuration
+
+# deprivlidged user to use
+[[ -z "$lvm_user" ]] && lvm_user="qemu"
+
+lvm_filename="${lvm_path}/${lvm_name}"
+
+command="${lvm_filename}"
+command_args="start"
+command_background="yes"
+supervise_daemon_args="-D 120 --user ${lvm_user} --chdir ${lvm_path}"
+
+pidfile="/run/lvm-${lvm_name}.pid"
+
+rc_cgroup_cleanup="yes"
+# this is a hack.. BUT it seems to work
+# TODO: we could use start_pre
+[[ ! "$lvm_filename" == "/lvm" ]] && rc_cgroup_settings="$(${lvm_filename} cgsettings)"
+
+depend() {
+	need net
+	after netconf
+}
+
+stop() {
+	ebegin "Stopping the VM gracefully"
+		# wait for lvm to try a graceful stop
+		${lvm_filename} stop
+		[[ ! "$?" == "0" ]] && {
+			# lvm couldn't gracefully stop it, just kill the VM process then
+			ewarn "could not stop VM gracefully, killing it..."
+			supervise_stop
+		}
+		supervise_stop
+	eend $?
+}

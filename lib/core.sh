@@ -46,14 +46,24 @@ StopVM() {
 	# and just kill the QEMU process hard
 	#
 	# (Though on other init systems; there won't be anything like that so we should timeout here too..)
+	
+	local count=60
 
 	if IsRunning && MonitorCommand "system_powerdown"; then
-		while IsRunning; do
-			# Just for insurance's sake;
-			MonitorCommand "system_powerdown"
-			sleep 1
+		while IsRunning && [ $count -gt 0 ]; do
+			sleep 1;
+			MonitorCommand "system_powerdown" # insurance
+			printf '.'
+			count=$((count - 1))
 		done
+		printf '\n'
 	fi
+
+	if [ $count -eq 0 ]; then
+		echo "Couldn't stop gracefully.."
+		exit 1
+	fi
+	exit 0
 }
 
 # Boot the virtual machine up 
@@ -61,12 +71,13 @@ StartVM() {
 	local BOOT_COMMAND="$VM_QEMU $VM_QEMU_ARGS"
 
 	[[ $(type -t VMPreBootHook) == "function" ]] && VMPreBootHook
-	
-	if [ ! "$VM_PIN_VCPU_THREADS" == "no" ]; then
-		taskset -ac $(GenEvenNumList $(nproc)) $BOOT_COMMAND $@
-	else
+
+# we have cgroups sir	
+#	if [ ! "$VM_PIN_VCPU_THREADS" == "no" ]; then
+#		taskset -ac $(GenEvenNumList $(nproc)) $BOOT_COMMAND $@
+#	else
 		$BOOT_COMMAND $@
-	fi
+#	fi
 	
 	[[ $(type -t VMPostShutdownHook) == "function" ]] && VMPostShutdownHook
 }
@@ -102,6 +113,11 @@ case "$1" in
 	monitor)
 		shift;
 		MonitorCommandLoud "$@"
+	;;
+
+	# this is in openrc format
+	cgsettings)
+		MakeCgSettings
 	;;
 
 	commandpretty)

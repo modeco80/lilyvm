@@ -25,7 +25,7 @@ CPU() {
 	local EXTRA_OPTS="$4"
 	
 	# Eghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh;;;
-	[[ "$VM_BASE" == *"q35"* ]] &&  EXTRA_OPTS="${EXTRA_OPTS},hv_vendor_id=qemu"
+	[[ "$VM_BASE" == *"q35"* ]] &&  EXTRA_OPTS="${EXTRA_OPTS},hv_vendor_id=balls"
 	
 	echo "
 		-cpu $1,$EXTRA_OPTS

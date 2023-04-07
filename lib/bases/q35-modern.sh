@@ -5,7 +5,7 @@
 # You can assign to this variable if using a custom QEMU binary,
 # and we'll obey it. (TODO: Put in core.sh?)
 if [ -z "$VM_QEMU" ]; then
-	VM_QEMU="qemu-system-x86_64"
+	VM_QEMU="/srv/collabvm/qemu/bin/qemu-system-x86_64"
 fi
 
 # Sane defaults for the QEMU monitor options
@@ -25,7 +25,7 @@ fi
 VM_QEMU_ARGS="
     -nodefaults
     -name $VM_NAME,process=$VM_NAME
-    -M q35,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on
+    -M q35,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
     -rtc base=localtime,clock=vm
     ${VM_DEVICES[@]}
     $VM_MONITOR

@@ -1,6 +1,7 @@
 #!/bin/bash
-
-# A setup for very legacy virtual machines.
+#
+# Generic setup for modern virtual machines
+# This is a version of Q35 that makes Windows XP/2000 work on VM0. -Dartz
 
 # You can assign to this variable if using a custom QEMU binary,
 # and we'll obey it. (TODO: Put in core.sh?)
@@ -22,9 +23,11 @@ if [ ! -z "$VM_QEMU_ARGS" ]; then
 	exit 1;
 fi
 
-VM_QEMU_ARGS="-nodefaults
+VM_QEMU_ARGS="
+    -nodefaults
     -name $VM_NAME,process=$VM_NAME
-    -M pc,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
+    -M pc-q35-2.10,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
     -rtc base=localtime,clock=vm
-	${VM_DEVICES[@]}
-    $VM_MONITOR"
+    ${VM_DEVICES[@]}
+    $VM_MONITOR
+    $VM_DISPLAY"

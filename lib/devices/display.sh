@@ -24,7 +24,11 @@ DisplayAdapter() {
 		;;
 		
 		qxl)
-			echo "-device qxl,id=$1"
+			echo "-device qxl-vga,id=$1"
+		;;
+
+		cirrus)
+			echo "-device cirrus-vga,id=$1"
 		;;
 	
 		*)
