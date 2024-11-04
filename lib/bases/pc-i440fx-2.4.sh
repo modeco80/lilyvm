@@ -26,7 +26,7 @@ fi
 
 VM_QEMU_ARGS="-nodefaults
     -name $VM_NAME,process=$VM_NAME
-    -machine pc,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
+    -machine pc-i440fx-2.4,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
     -rtc base=localtime,clock=vm
     ${_LVM_QEMU_OPTIONS_COMMON[@]}
     ${VM_DEVICES[@]}

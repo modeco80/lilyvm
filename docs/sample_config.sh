@@ -37,4 +37,7 @@ VM_DEVICES=(
 	"-device usb-tablet"
 );
 
+# If you plan on using this configuration on CollabVM, uncomment this.
+# VM_MONITOR=""
+
 . ${VM_ROOT}/lib/core.sh

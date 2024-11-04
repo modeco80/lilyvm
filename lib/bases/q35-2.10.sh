@@ -3,6 +3,8 @@
 # Generic setup for modern Windows VMs
 # This is a version of Q35 that makes Windows XP/2000 work on VM0. -Dartz
 
+. ${VM_ROOT}/lib/bases/common.sh
+
 # You can assign to this variable if using a custom QEMU binary,
 # and we'll obey it. (TODO: Put in core.sh?)
 if [ -z "$VM_QEMU" ]; then
@@ -28,6 +30,7 @@ VM_QEMU_ARGS="
     -name $VM_NAME,process=$VM_NAME
     -machine pc-q35-2.10,accel=kvm,kernel_irqchip=on,hpet=off,acpi=on,usb=on
     -rtc base=localtime,clock=vm
+    ${_LVM_QEMU_OPTIONS_COMMON[@]}
     ${VM_DEVICES[@]}
     $VM_MONITOR
     $VM_DISPLAY"

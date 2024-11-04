@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# Functions to generate QEMU drive stuff.
+# Set to anything other than "true" to disable ",edidfile" (part of a internal QEMU patch).
+# 
+# For anyone else this is likely always false, as I haven't released
+# that patch yet. (I'm only setting it to true here because I don't feel like
+# touching 10+ lvm configs.)
+_LVM_HAS_EDIDFILE_PATCH="true"
 
 # $1 - id
 # $2 - type
@@ -20,7 +25,11 @@ DisplayAdapter() {
 	
 	case "$2" in
 		vga)
-			echo "-device VGA,id=$1"
+			if [[ "$_LVM_HAS_EDIDFILE_PATH" == "true" ]]; then
+				echo "-device VGA,id=$1,edidfile=/srv/collabvm/edid.bin"
+			else
+				echo "-device VGA,id=$1"
+			fi
 		;;
 		
 		qxl)
@@ -30,7 +39,9 @@ DisplayAdapter() {
 		cirrus)
 			echo "-device cirrus-vga,id=$1"
 		;;
-	
+		vmware)
+			echo "-device vmware-svga,id=$1"
+		;;
 		*)
 			echo "error in DisplayAdapter: Unrecognized type $2" >/dev/stderr;
 			exit 1;

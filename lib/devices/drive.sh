@@ -2,19 +2,31 @@
 
 # Functions to generate QEMU drive stuff.
 
-_LVM_AIO="threads" # nvm 6.1 lts io_uring is still fucked...
+#_LVM_AIO="threads" # nvm 6.1 lts io_uring is still fucked...
 #io_uring once we get 6.x
+
+_LVM_AIO="io_uring"
+
+# set to "false" or anything else to disable disk limiting
+LVM_DISK_LIMIT_ENABLE="true"
 
 # this is in format [base] [burst]
 # Feel free to overwrite this in configuration
-LVM_DISK_LIMIT_BPS="$(MB 50) $(MB 65)"
+#LVM_DISK_LIMIT_BPS="$(MB 50) $(MB 80)"
+LVM_DISK_LIMIT_BPS="$(MB 150) $(MB 150)"
 LVM_DISK_LIMIT_IOPS="1250 1500"
+# default, let qemu decide
+LVM_DISK_LIMIT_IOPS_SIZE="0"
 
 # generate LVM disk limits
 _GenerateLVMDiskLimit() {
  	local BPS=($LVM_DISK_LIMIT_BPS); # For both of these: 0 - base, 1 - burst
 	local IOPS=($LVM_DISK_LIMIT_IOPS);
-	echo "group=lvm,bps_rd=${BPS[0]},bps_wr=${BPS[0]},bps_rd_max=${BPS[1]},bps_wr_max=${BPS[1]},iops_rd=${IOPS[0]},iops_wr=${IOPS[0]},iops_rd_max=${IOPS[1]},iops_wr_max=${IOPS[1]}"
+	if [[ "$LVM_DISK_LIMIT_ENABLE" == "true" ]]; then
+		echo ",group=lvm,bps_rd=${BPS[0]},bps_wr=${BPS[0]},bps_rd_max=${BPS[1]},bps_wr_max=${BPS[1]},iops_rd=${IOPS[0]},iops_wr=${IOPS[0]},iops_rd_max=${IOPS[1]},iops_wr_max=${IOPS[1]},iops_size=${LVM_DISK_LIMIT_IOPS_SIZE}"
+	else
+		echo ""
+	fi
 }
 
 
@@ -58,7 +70,7 @@ HdDrive() {
 		SSD_HACK=",rotation_rate=1"
 	fi
 	
-	echo "-drive if=none,file=$3,$CACHE_STR,discard=unmap,$FORMAT_STR,aio=$_LVM_AIO,id=$1_drive,$(_GenerateLVMDiskLimit) -device $2,id=$1${SSD_HACK},drive=$1_drive";
+	echo "-drive if=none,file=$3,$CACHE_STR,discard=unmap,$FORMAT_STR,aio=$_LVM_AIO,id=$1_drive$(_GenerateLVMDiskLimit) -device $2,id=$1${SSD_HACK},drive=$1_drive";
 }
 
 # $1 - id

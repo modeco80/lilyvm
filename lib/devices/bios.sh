@@ -9,6 +9,13 @@ Uefi() {
 	";
 }
 
+UefiReadWrite() {
+        echo "
+                -drive if=pflash,format=raw,file=/usr/share/ovmf/x64/OVMF_CODE.fd
+                -drive if=pflash,format=raw,file=${VM_DATA_ROOT}/vars.fd
+        ";
+}
+
 BiosBoot() {
 	local MENU_STR=""
 

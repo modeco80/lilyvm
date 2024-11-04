@@ -81,10 +81,11 @@ StartVM() {
 #	if [ ! "$VM_PIN_VCPU_THREADS" == "no" ]; then
 #		taskset -ac $(GenEvenNumList $(nproc)) $BOOT_COMMAND $@
 #	else
-		$BOOT_COMMAND $@
+		exec $BOOT_COMMAND $@
 #	fi
 	
-	[[ $(type -t VMPostShutdownHook) == "function" ]] && VMPostShutdownHook
+	# not used by cvm
+	#[[ $(type -t VMPostShutdownHook) == "function" ]] && VMPostShutdownHook
 }
 
 Help() {
